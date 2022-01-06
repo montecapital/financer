@@ -12,3 +12,7 @@ LazyData: true
 Imports: rvest,httr,stringr, curl
 URL: https://github.com/montecapital/financer
 BugReports: https://github.com/montecapital/financer/issues
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

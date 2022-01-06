@@ -71,6 +71,25 @@
   return(data)
 }
 
+# convert to numeric
+.mrn_parse_values <- function(val){
+  # first trial
+  test1 = as.numeric(val)
+  # if all good, continue
+  if(!is.na(test1)){out = test1}
+  # modify otherwise
+  if(is.na(test1)){
+    # split
+    splt = str_split(val, "")[[1]]
+    # reverse and check
+    mltply = switch(tail(splt, n = 1), "k" = 1000, "M" = 1e6, "B" = 1e9, "%" = 1e-2)
+    # convert
+    out = as.numeric(paste0(head(splt, -1), collapse = "")) * mltply
+  }
+  # return
+  return(out)
+}
+
 #' Gets financial reports from Morningstar
 #'
 #' @param tikr tiker of the company, char.

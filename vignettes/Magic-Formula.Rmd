@@ -1,0 +1,58 @@
+---
+title: "Magic-Formula"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Magic-Formula}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The Magic Formula is a [value investing](https://en.wikipedia.org/wiki/Value_investing)
+strategy developed and described by [Joel Greenblatt](https://en.wikipedia.org/wiki/Joel_Greenblatt).
+The strategy seeks *good companies* at *bargain prices*. 
+
+Good companies are those with a high *Return on Capital* (*ROC*). That is, less
+capital is required per dollar made. This makes more prone to faster growth.
+Cheap companies are defined by the *Earning yield* (*EY*), i.e. how much the company
+makes relative to its price. The higher the earning yield the cheaper the company
+is.
+
+Both numbers, *ROC* and *EY*, can be computed using `assess_magicf()` function,
+passing the tiker symbol of a company.
+
+```{r setup}
+library(financer)
+
+# report roc and ey
+assess_magicf("ILMN", "XNAS")
+
+```
+Values have no meaning on their own. According to Greenblatt, these numbers
+should be used to compare and order companies. In the following, we compute
+the latest numbers of Qiagen (*QGEN*), one of the main competitors of Illumina
+that operates on the New York Stock Exchange:
+
+```{r}
+
+# report roc and ey
+assess_magicf("QGEN", "XNYS")
+
+```
+Currently (Jan. 2022), EY are slightly higher for QGEN ($0.06$ vs. $0.019$),
+meaning that the company is cheaper from the investor's perspective. However,
+the ROC of QGEN is considerably smaller than ILMN ($-0.81$ vs. $0.36$). Hence,
+ILMN is healthier from a business perspective, specially considering the 
+negative sign. Negative values warn about the company's liabilities being
+greater than assets.
+
+The usage of the magic formula requires to run the analysis for all the
+companies in the market between certain market-cap values. Then sort
+the companies by *ROC* and assign and order value. Repeat the same operation
+with *EY* and finally sum the order values.

@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of financer is to retrieve financial information of companies
-from several websites.
+The goal of financer is to retrieve (free) financial information of companies
+from several websites using R.
 
 ## Installation
 
@@ -32,11 +32,78 @@ devtools::install_github("montecapital/financer")
 
 ## Example
 
-This is a basic example which shows you how to retrieve the balance sheet
-of Illumina Inc. from Morningstar:
+This is a basic example which shows you how to retrieve information
+of Illumina Inc. Use [Yahoo Finance](https://finance.yahoo.com/) for basic
+information:
 
-```{r example}
+```{r example_yahoo}
 library(financer)
-## basic example code
-morning_report("ILMN", "XNAS", "bs")
+
+# tiker of Illumina Inc.
+tikr = "ILMN"
+
+# Overview
+ilmn.ovrw = yahoo_scrape("ILMN")
+ilmn.ovrw[[2]]
+
+# Key-statistics
+ilmn.stat = yahoo_scrape("ILMN", page = "key-statistics", ntable = "all")
+# Valuation measures
+ilmn.stat[[1]]
+
+# Analysis page
+ilmn.anal = yahoo_scrape("ILMN", page = "analysis", ntable = "all")
+# Expected revenues
+ilmn.anal[[2]]
+
 ```
+
+Go to [Morningstar](https://www.morningstar.com/) for more detail information
+such as the 5-Year financial reports:
+
+```{r example_morning}
+
+# NASDAQ: Stock exchange in which Illumina operates
+mrkt = "XNAS"
+
+# Get the Income Statement
+ilmn.is = morning_report(tikr, mrkt, "is")
+# Extract the revenue
+ilmn.is["Revenue",]
+
+# Get the Balance Sheet
+ilmn.bs = morning_report(tikr, mrkt, "bs")
+# Extract cash and cash equivalents
+ilmn.bs["Cash_and_cash_equivalents",]
+
+# Get the Cash Flow
+ilmn.cf = morning_report(tikr, mrkt, "cf")
+# Show the free cash flow
+ilmn.cf["Free_cash_flow",]
+
+```
+
+If looking good, visit [Quick FS](https://quickfs.net/) for a 10-Year financial
+report. It requires a subscription, but the free version offers 500 requests
+a day:
+
+```{r example_quickfs}
+
+# Illumina operates in the US
+country = "US"
+
+# check current quota
+quickfs_quota()
+
+# get the statements
+ilmn.fstat.long = quickfs_getstatement("ILMN", "US")
+ilmn.fstat.long$finances$finances_ts["revenue",]
+
+# financial statements "cost" 10 points
+quickfs_quota()
+
+```
+
+## Disclaimer
+
+This is a personal project and doesn't come with any guarantee.

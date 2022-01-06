@@ -11,7 +11,7 @@
 #' revenues, etc.
 #'
 #' @example
-yahoo_scrape <- function(tikr, page = "", ntable = "all", stat = "Market Cap"){
+yahoo_scrape <- function(tikr, page = "", ntable = "all", stat = "all"){
   # refine the page
   if(page != "") page = paste0("/",page)
   # find the  url

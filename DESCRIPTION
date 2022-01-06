@@ -10,3 +10,5 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LazyData: true
 Imports: rvest,httr,stringr, curl
+URL: https://github.com/montecapital/financer
+BugReports: https://github.com/montecapital/financer/issues

@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# financer
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of financer is to retrieve financial information of companies
+from several websites.
+
+## Installation
+
+You can install the development version of financer from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("montecapital/financer")
+```
+
+## Example
+
+This is a basic example which shows you how to retrieve the balance sheet
+of Illumina Inc. from Morningstar:
+
+```{r example}
+library(financer)
+## basic example code
+morning_report("ILMN", "XNAS", "bs")
+```

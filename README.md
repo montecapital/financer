@@ -39,9 +39,9 @@ ilmn.ovrw[[2]]
 #> # A tibble: 8 x 2
 #>   X1                       X2                         
 #>   <chr>                    <chr>                      
-#> 1 Market Cap               57.5B                      
+#> 1 Market Cap               57.887B                    
 #> 2 Beta (5Y Monthly)        0.89                       
-#> 3 PE Ratio (TTM)           60.22                      
+#> 3 PE Ratio (TTM)           60.63                      
 #> 4 EPS (TTM)                6.11                       
 #> 5 Earnings Date            Feb 09, 2022 - Feb 14, 2022
 #> 6 Forward Dividend & Yield N/A (N/A)                  
@@ -52,18 +52,16 @@ ilmn.ovrw[[2]]
 ilmn.stat = yahoo_scrape("ILMN", page = "key-statistics", ntable = "all")
 # Valuation measures
 ilmn.stat[[1]]
-#> # A tibble: 9 x 2
-#>   X1                        X2    
-#>   <chr>                     <chr> 
-#> 1 Market Cap (intraday)     58.54B
-#> 2 Enterprise Value          59.81B
-#> 3 Trailing P/E              61.30 
-#> 4 Forward P/E               91.74 
-#> 5 PEG Ratio (5 yr expected) 2.95  
-#> 6 Price/Sales (ttm)         13.02 
-#> 7 Price/Book (mrq)          5.53  
-#> 8 Enterprise Value/Revenue  13.97 
-#> 9 Enterprise Value/EBITDA   43.56
+#> # A tibble: 7 x 2
+#>   X1                       X2    
+#>   <chr>                    <chr> 
+#> 1 Beta (5Y Monthly)        0.89  
+#> 2 52-Week Change 3         N/A   
+#> 3 S&P500 52-Week Change 3  N/A   
+#> 4 52 Week High 3           555.77
+#> 5 52 Week Low 3            341.03
+#> 6 50-Day Moving Average 3  381.76
+#> 7 200-Day Moving Average 3 423.44
 
 # Analysis page
 ilmn.anal = yahoo_scrape("ILMN", page = "analysis", ntable = "all")
@@ -110,6 +108,29 @@ ilmn.cf["Free_cash_flow",]
 #> 415857000 563000000 846000000 842000000 891000000 469000000
 ```
 
+Or you can inspect the key ratios:
+
+``` r
+# get the key ratios
+ilmn.kr = morning_keyratios("ILMN", "XNAS")
+# print growth
+head(ilmn.kr[[4]])
+#>                           2011-12 2012-12 2013-12 2014-12 2015-12 2016-12
+#> Year_over_Year                  0    8.81   23.74   30.97   19.26    8.05
+#> 3-Year_Average                  0   19.90   16.33   20.81   24.56   19.06
+#> 5-Year_Average                  0   25.64   19.91   22.81   19.72   17.84
+#> 10-Year_Average                 0   60.64   48.08   43.41   40.61   29.23
+#> Year_over_Year_noncurrent       0   23.02   -0.94   74.48   40.54   -7.07
+#> 3-Year_Average_noncurrent       0   23.28    6.28   28.59   34.43   31.59
+#>                           2017-12 2018-12 2019-12 2020-12 Latest Qtr
+#> Year_over_Year              14.74   21.11    6.30   -8.58      39.55
+#> 3-Year_Average              13.92   14.51   13.89    5.58       0.00
+#> 5-Year_Average              19.10   18.59   13.74    7.85       0.00
+#> 10-Year_Average             22.33   19.25   18.19   13.63       0.00
+#> Year_over_Year_noncurrent    4.66   45.71   11.55  -41.12    -436.42
+#> 3-Year_Average_noncurrent   10.98   12.32   19.37   -1.45       0.00
+```
+
 If looking good, visit [Quick FS](https://quickfs.net/) for a 10-Year
 financial report. It requires a subscription, but the free version
 offers 500 requests a day:
@@ -120,11 +141,11 @@ country = "US"
 
 # check current quota
 quickfs_quota()
-#> [1] 490
+#> [1] 500
 
 # get the statements
 ilmn.fstat.long = quickfs_getstatement("ILMN", "US")
-#> Today's remaining quota: 480
+#> Today's remaining quota: 490
 ilmn.fstat.long$finances$finances_ts["revenue",]
 #>         2001-12  2002-12  2003-12  2004-12  2005-12   2006-12   2007-12
 #> revenue 2486000 10040000 28035000 50583000 73501000 184586000 366799000
@@ -135,7 +156,7 @@ ilmn.fstat.long$finances$finances_ts["revenue",]
 
 # financial statements "cost" 10 points
 quickfs_quota()
-#> [1] 480
+#> [1] 490
 ```
 
 ## Disclaimer

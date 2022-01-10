@@ -83,6 +83,15 @@ ilmn.cf["Free_cash_flow",]
 
 ```
 
+Or you can inspect the key ratios:
+
+```{r}
+# get the key ratios
+ilmn.kr = morning_keyratios("ILMN", "XNAS")
+# print growth
+head(ilmn.kr[[4]])
+```
+
 If looking good, visit [Quick FS](https://quickfs.net/) for a 10-Year financial
 report. It requires a subscription, but the free version offers 500 requests
 a day:

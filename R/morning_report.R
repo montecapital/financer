@@ -74,7 +74,7 @@
 # convert to numeric
 .mrn_parse_values <- function(val){
   # first trial
-  test1 = as.numeric(val)
+  test1 = suppressWarnings(as.numeric(val))
   # if all good, continue
   if(!is.na(test1)){out = test1}
   # modify otherwise
@@ -117,8 +117,13 @@ morning_report <- function(tikr, mrkt, rprt){
   urls = .set_url_report(mrkt, tikr, rprt)
   # send the request
   reqs = .send_request(urls)
-  # parse the report
-  data = .parse_report(reqs)
+  if(length(reqs) != 0){
+    # parse the report
+    data = .parse_report(reqs)
+  }else{
+    # return NA
+    data = NA
+  }
   # return the dataset
   return(data)
 }

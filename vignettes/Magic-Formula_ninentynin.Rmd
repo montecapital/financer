@@ -1,0 +1,85 @@
+---
+title: "Magic-Formula with 99"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Magic-Formula}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+  eval = FALSE
+)
+```
+
+The purpose of this vignette is to show how to use the *Magic Formula* to
+analyze the stocks traded by [99](https://ninetynine.com/). First, download
+the list of companies traded by the broker:
+
+```{r ninetynine_download}
+library(financer)
+# collect the 99 stock list 
+# nn.stocks = ninentynine_stocklist(retrn = FALSE)
+# save the list locally
+nn.stocks = "./vignettes/nintynine_list_20220109.csv"
+nn.stocks = read.csv(nn.stocks)
+```
+
+The function downloads the list of stocks into a *.csv* file, which is then
+imported into R. We need to find the markets and countries in which the stocks
+are traded:
+
+```{r find_markets}
+# get tikrs currently traded in different markets
+tikrs = quickfs_getikrs()
+# cross both datasets
+nn.mrkts = quickfs_findmrkt(nn.stocks$tikr, tikrs)
+```
+
+Next we combine both datasets together and save again:
+
+```{r combine}
+# save as data frames
+nn.mrkts = do.call(rbind,lapply(nn.mrkts, function(x) unlist(x)))
+colnames(nn.mrkts) = c("country", "mrkt")
+# combine datasets
+nn.stocks = cbind(nn.stocks, nn.mrkts[nn.stocks$tikr,])
+write.table(nn.stocks, "stocks_list.csv", row.names = F, col.names = T)
+# remove uncomplete columns
+nn.stocks = nn.stocks[complete.cases(nn.stocks),]
+```
+
+Next, we apply the Magic Formula to each of the stocks:
+
+```{r apply_magicf}
+# run the analysis
+nn.magic = apply(nn.stocks, 1, function(x){
+  unlist(assess_magicf(x["tikr"], x["mrkt"]))
+})
+# 
+# # re-format
+# nn.magic = do.call(rbind, nn.magic)
+# nn.magic = cbind(nn.stocks[,1])
+# nn.magic = colnames(nn.magic) = c("tikr", "roc", "ey")
+
+```
+
+Now, we sort the list of stocks based on the *ROC* and the *EY*:
+
+```{r order}
+# # order of roc
+# roc.ordr = sort(nn.magic$roc, decreasing = TRUE)
+# # order of ey
+# ey.ordr = sort(nn.magic$ey, decreasing = FALSE)
+# # combined metric
+# magicf.out = roc.ordr + ey.ordr
+# # sort using the combined metric
+# ordr = sort(magicf.out)
+# # ordered stocks
+# nn.stocks = nn.stocks[order(magicf.out),]
+# cbind(nn.stocks, roc.ordr)
+```
